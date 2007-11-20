@@ -34,6 +34,11 @@ namespace FacebookPhotobook
       this.imageListPhotos = new System.Windows.Forms.ImageList(this.components);
       this.buttonGetPhotos = new System.Windows.Forms.Button();
       this.groupBoxConnect = new System.Windows.Forms.GroupBox();
+      this.panelTimeout = new System.Windows.Forms.Panel();
+      this.labelTimeoutTimeSec = new System.Windows.Forms.Label();
+      this.labelTimeoutTime = new System.Windows.Forms.Label();
+      this.numericUpDownTimeoutTime = new System.Windows.Forms.NumericUpDown();
+      this.buttonAbout = new System.Windows.Forms.Button();
       this.checkBoxImmediateDownload = new System.Windows.Forms.CheckBox();
       this.buttonGetOptions = new System.Windows.Forms.Button();
       this.buttonConnect = new System.Windows.Forms.Button();
@@ -72,7 +77,11 @@ namespace FacebookPhotobook
       this.pictureBoxDownloader = new System.Windows.Forms.PictureBox();
       this.buttonCancelDownload = new System.Windows.Forms.Button();
       this.buttonCancelGetPhotos = new System.Windows.Forms.Button();
+      this.progressBarDownloadPhoto = new System.Windows.Forms.ProgressBar();
+      this.progressBarDownloadTotal = new System.Windows.Forms.ProgressBar();
       this.groupBoxConnect.SuspendLayout();
+      this.panelTimeout.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTimeoutTime)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.pictureUserPicture)).BeginInit();
       this.splitContainerMain.Panel1.SuspendLayout();
       this.splitContainerMain.Panel2.SuspendLayout();
@@ -92,10 +101,10 @@ namespace FacebookPhotobook
       // 
       this.labelUserName.AutoSize = true;
       this.labelUserName.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.labelUserName.Location = new System.Drawing.Point(8, 144);
+      this.labelUserName.Location = new System.Drawing.Point(8, 192);
       this.labelUserName.Name = "labelUserName";
       this.labelUserName.Size = new System.Drawing.Size(38, 14);
-      this.labelUserName.TabIndex = 2;
+      this.labelUserName.TabIndex = 5;
       this.labelUserName.Text = "Name";
       // 
       // imageListPhotos
@@ -112,6 +121,7 @@ namespace FacebookPhotobook
       this.imageListPhotos.Images.SetKeyName(7, "Untagged Photo.png");
       this.imageListPhotos.Images.SetKeyName(8, "Untagged Album Cover.png");
       this.imageListPhotos.Images.SetKeyName(9, "Untagged Uncovered Album.png");
+      this.imageListPhotos.Images.SetKeyName(10, "Albumless.png");
       // 
       // buttonGetPhotos
       // 
@@ -125,6 +135,8 @@ namespace FacebookPhotobook
       // 
       // groupBoxConnect
       // 
+      this.groupBoxConnect.Controls.Add(this.panelTimeout);
+      this.groupBoxConnect.Controls.Add(this.buttonAbout);
       this.groupBoxConnect.Controls.Add(this.checkBoxImmediateDownload);
       this.groupBoxConnect.Controls.Add(this.buttonGetOptions);
       this.groupBoxConnect.Controls.Add(this.buttonConnect);
@@ -139,14 +151,70 @@ namespace FacebookPhotobook
       this.groupBoxConnect.TabStop = false;
       this.groupBoxConnect.Text = "Connection";
       // 
+      // panelTimeout
+      // 
+      this.panelTimeout.Controls.Add(this.labelTimeoutTimeSec);
+      this.panelTimeout.Controls.Add(this.labelTimeoutTime);
+      this.panelTimeout.Controls.Add(this.numericUpDownTimeoutTime);
+      this.panelTimeout.Dock = System.Windows.Forms.DockStyle.Bottom;
+      this.panelTimeout.Location = new System.Drawing.Point(3, 360);
+      this.panelTimeout.Name = "panelTimeout";
+      this.panelTimeout.Size = new System.Drawing.Size(140, 45);
+      this.panelTimeout.TabIndex = 15;
+      // 
+      // labelTimeoutTimeSec
+      // 
+      this.labelTimeoutTimeSec.AutoSize = true;
+      this.labelTimeoutTimeSec.Location = new System.Drawing.Point(92, 24);
+      this.labelTimeoutTimeSec.Name = "labelTimeoutTimeSec";
+      this.labelTimeoutTimeSec.Size = new System.Drawing.Size(24, 13);
+      this.labelTimeoutTimeSec.TabIndex = 17;
+      this.labelTimeoutTimeSec.Text = "sec";
+      // 
+      // labelTimeoutTime
+      // 
+      this.labelTimeoutTime.AutoSize = true;
+      this.labelTimeoutTime.Location = new System.Drawing.Point(4, 4);
+      this.labelTimeoutTime.Name = "labelTimeoutTime";
+      this.labelTimeoutTime.Size = new System.Drawing.Size(74, 13);
+      this.labelTimeoutTime.TabIndex = 16;
+      this.labelTimeoutTime.Text = "Timeout Time:";
+      // 
+      // numericUpDownTimeoutTime
+      // 
+      this.numericUpDownTimeoutTime.Location = new System.Drawing.Point(4, 20);
+      this.numericUpDownTimeoutTime.Maximum = new decimal(new int[] {
+            65536,
+            0,
+            0,
+            0});
+      this.numericUpDownTimeoutTime.Name = "numericUpDownTimeoutTime";
+      this.numericUpDownTimeoutTime.Size = new System.Drawing.Size(84, 20);
+      this.numericUpDownTimeoutTime.TabIndex = 15;
+      this.numericUpDownTimeoutTime.Value = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+      // 
+      // buttonAbout
+      // 
+      this.buttonAbout.Location = new System.Drawing.Point(8, 104);
+      this.buttonAbout.Name = "buttonAbout";
+      this.buttonAbout.Size = new System.Drawing.Size(80, 36);
+      this.buttonAbout.TabIndex = 3;
+      this.buttonAbout.Text = "About";
+      this.buttonAbout.UseVisualStyleBackColor = true;
+      this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
+      // 
       // checkBoxImmediateDownload
       // 
       this.checkBoxImmediateDownload.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                   | System.Windows.Forms.AnchorStyles.Right)));
-      this.checkBoxImmediateDownload.Location = new System.Drawing.Point(12, 104);
+      this.checkBoxImmediateDownload.Location = new System.Drawing.Point(8, 148);
       this.checkBoxImmediateDownload.Name = "checkBoxImmediateDownload";
       this.checkBoxImmediateDownload.Size = new System.Drawing.Size(124, 32);
-      this.checkBoxImmediateDownload.TabIndex = 8;
+      this.checkBoxImmediateDownload.TabIndex = 4;
       this.checkBoxImmediateDownload.Text = "Automatically start downloading";
       this.checkBoxImmediateDownload.UseVisualStyleBackColor = true;
       // 
@@ -156,7 +224,7 @@ namespace FacebookPhotobook
       this.buttonGetOptions.Location = new System.Drawing.Point(112, 60);
       this.buttonGetOptions.Name = "buttonGetOptions";
       this.buttonGetOptions.Size = new System.Drawing.Size(16, 40);
-      this.buttonGetOptions.TabIndex = 7;
+      this.buttonGetOptions.TabIndex = 2;
       this.buttonGetOptions.UseVisualStyleBackColor = true;
       this.buttonGetOptions.Click += new System.EventHandler(this.buttonGetOptions_Click);
       this.buttonGetOptions.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonGetOptions_MouseDown);
@@ -174,7 +242,7 @@ namespace FacebookPhotobook
       // pictureUserPicture
       // 
       this.pictureUserPicture.BackColor = System.Drawing.Color.Transparent;
-      this.pictureUserPicture.Location = new System.Drawing.Point(8, 160);
+      this.pictureUserPicture.Location = new System.Drawing.Point(8, 208);
       this.pictureUserPicture.Name = "pictureUserPicture";
       this.pictureUserPicture.Size = new System.Drawing.Size(120, 120);
       this.pictureUserPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -226,7 +294,7 @@ namespace FacebookPhotobook
       this.groupBoxPhotobook.Location = new System.Drawing.Point(0, 0);
       this.groupBoxPhotobook.Name = "groupBoxPhotobook";
       this.groupBoxPhotobook.Size = new System.Drawing.Size(508, 404);
-      this.groupBoxPhotobook.TabIndex = 1;
+      this.groupBoxPhotobook.TabIndex = 0;
       this.groupBoxPhotobook.TabStop = false;
       this.groupBoxPhotobook.Text = "Photobook";
       this.groupBoxPhotobook.Visible = false;
@@ -237,7 +305,7 @@ namespace FacebookPhotobook
       this.buttonView.Location = new System.Drawing.Point(244, 376);
       this.buttonView.Name = "buttonView";
       this.buttonView.Size = new System.Drawing.Size(76, 22);
-      this.buttonView.TabIndex = 6;
+      this.buttonView.TabIndex = 3;
       this.buttonView.Text = "View...";
       this.buttonView.UseVisualStyleBackColor = true;
       this.buttonView.Click += new System.EventHandler(this.buttonView_Click);
@@ -251,7 +319,7 @@ namespace FacebookPhotobook
       this.checkBoxSkipExisting.Location = new System.Drawing.Point(8, 380);
       this.checkBoxSkipExisting.Name = "checkBoxSkipExisting";
       this.checkBoxSkipExisting.Size = new System.Drawing.Size(85, 17);
-      this.checkBoxSkipExisting.TabIndex = 3;
+      this.checkBoxSkipExisting.TabIndex = 2;
       this.checkBoxSkipExisting.Text = "Skip existing";
       this.checkBoxSkipExisting.UseVisualStyleBackColor = true;
       // 
@@ -260,6 +328,7 @@ namespace FacebookPhotobook
       this.splitContainerPhotos.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                   | System.Windows.Forms.AnchorStyles.Left)
                   | System.Windows.Forms.AnchorStyles.Right)));
+      this.splitContainerPhotos.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
       this.splitContainerPhotos.Location = new System.Drawing.Point(8, 20);
       this.splitContainerPhotos.Name = "splitContainerPhotos";
       // 
@@ -276,7 +345,7 @@ namespace FacebookPhotobook
       this.splitContainerPhotos.Panel2.Controls.Add(this.labelDescription);
       this.splitContainerPhotos.Panel2.Controls.Add(this.pictureBoxPreview);
       this.splitContainerPhotos.Size = new System.Drawing.Size(492, 312);
-      this.splitContainerPhotos.SplitterDistance = 327;
+      this.splitContainerPhotos.SplitterDistance = 358;
       this.splitContainerPhotos.TabIndex = 0;
       // 
       // treeViewPhotos
@@ -289,8 +358,8 @@ namespace FacebookPhotobook
       this.treeViewPhotos.Location = new System.Drawing.Point(0, 28);
       this.treeViewPhotos.Name = "treeViewPhotos";
       this.treeViewPhotos.SelectedImageIndex = 0;
-      this.treeViewPhotos.Size = new System.Drawing.Size(327, 284);
-      this.treeViewPhotos.TabIndex = 1;
+      this.treeViewPhotos.Size = new System.Drawing.Size(358, 284);
+      this.treeViewPhotos.TabIndex = 0;
       this.treeViewPhotos.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewPhotos_NodeMouseDoubleClick);
       this.treeViewPhotos.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewPhotos_AfterSelect);
       // 
@@ -304,7 +373,7 @@ namespace FacebookPhotobook
       this.flowLayoutPanelOwnerUserOrAlbum.Dock = System.Windows.Forms.DockStyle.Top;
       this.flowLayoutPanelOwnerUserOrAlbum.Location = new System.Drawing.Point(0, 0);
       this.flowLayoutPanelOwnerUserOrAlbum.Name = "flowLayoutPanelOwnerUserOrAlbum";
-      this.flowLayoutPanelOwnerUserOrAlbum.Size = new System.Drawing.Size(327, 28);
+      this.flowLayoutPanelOwnerUserOrAlbum.Size = new System.Drawing.Size(358, 28);
       this.flowLayoutPanelOwnerUserOrAlbum.TabIndex = 0;
       // 
       // buttonExpandAll
@@ -312,7 +381,7 @@ namespace FacebookPhotobook
       this.buttonExpandAll.Location = new System.Drawing.Point(3, 3);
       this.buttonExpandAll.Name = "buttonExpandAll";
       this.buttonExpandAll.Size = new System.Drawing.Size(56, 22);
-      this.buttonExpandAll.TabIndex = 1;
+      this.buttonExpandAll.TabIndex = 0;
       this.buttonExpandAll.Text = "Expand";
       this.buttonExpandAll.UseVisualStyleBackColor = true;
       this.buttonExpandAll.Click += new System.EventHandler(this.buttonExpandAll_Click);
@@ -322,7 +391,7 @@ namespace FacebookPhotobook
       this.buttonCollapseAll.Location = new System.Drawing.Point(65, 3);
       this.buttonCollapseAll.Name = "buttonCollapseAll";
       this.buttonCollapseAll.Size = new System.Drawing.Size(56, 22);
-      this.buttonCollapseAll.TabIndex = 2;
+      this.buttonCollapseAll.TabIndex = 1;
       this.buttonCollapseAll.Text = "Collapse";
       this.buttonCollapseAll.UseVisualStyleBackColor = true;
       this.buttonCollapseAll.Click += new System.EventHandler(this.buttonCollapseAll_Click);
@@ -332,7 +401,7 @@ namespace FacebookPhotobook
       this.buttonShowAlbum.Location = new System.Drawing.Point(127, 3);
       this.buttonShowAlbum.Name = "buttonShowAlbum";
       this.buttonShowAlbum.Size = new System.Drawing.Size(97, 22);
-      this.buttonShowAlbum.TabIndex = 3;
+      this.buttonShowAlbum.TabIndex = 2;
       this.buttonShowAlbum.Text = "Show Albums";
       this.buttonShowAlbum.UseVisualStyleBackColor = true;
       this.buttonShowAlbum.Click += new System.EventHandler(this.buttonShowAlbums_Click);
@@ -363,7 +432,7 @@ namespace FacebookPhotobook
       this.linkLabelViewLarge.Location = new System.Drawing.Point(4, 92);
       this.linkLabelViewLarge.Name = "linkLabelViewLarge";
       this.linkLabelViewLarge.Size = new System.Drawing.Size(92, 13);
-      this.linkLabelViewLarge.TabIndex = 11;
+      this.linkLabelViewLarge.TabIndex = 0;
       this.linkLabelViewLarge.TabStop = true;
       this.linkLabelViewLarge.Text = "View Large Image";
       this.linkLabelViewLarge.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelViewLarge_LinkClicked);
@@ -375,7 +444,7 @@ namespace FacebookPhotobook
       this.labelDescriptionTitle.Location = new System.Drawing.Point(4, 136);
       this.labelDescriptionTitle.Name = "labelDescriptionTitle";
       this.labelDescriptionTitle.Size = new System.Drawing.Size(71, 13);
-      this.labelDescriptionTitle.TabIndex = 10;
+      this.labelDescriptionTitle.TabIndex = 2;
       this.labelDescriptionTitle.Text = "Description";
       // 
       // labelDateCreated
@@ -385,7 +454,7 @@ namespace FacebookPhotobook
       this.labelDateCreated.Location = new System.Drawing.Point(4, 112);
       this.labelDateCreated.Name = "labelDateCreated";
       this.labelDateCreated.Size = new System.Drawing.Size(30, 13);
-      this.labelDateCreated.TabIndex = 9;
+      this.labelDateCreated.TabIndex = 1;
       this.labelDateCreated.Text = "Date";
       // 
       // labelDescription
@@ -395,8 +464,8 @@ namespace FacebookPhotobook
                   | System.Windows.Forms.AnchorStyles.Right)));
       this.labelDescription.Location = new System.Drawing.Point(4, 152);
       this.labelDescription.Name = "labelDescription";
-      this.labelDescription.Size = new System.Drawing.Size(156, 158);
-      this.labelDescription.TabIndex = 8;
+      this.labelDescription.Size = new System.Drawing.Size(124, 156);
+      this.labelDescription.TabIndex = 3;
       // 
       // pictureBoxPreview
       // 
@@ -419,7 +488,7 @@ namespace FacebookPhotobook
       this.buttonBrowse.Location = new System.Drawing.Point(320, 376);
       this.buttonBrowse.Name = "buttonBrowse";
       this.buttonBrowse.Size = new System.Drawing.Size(76, 22);
-      this.buttonBrowse.TabIndex = 2;
+      this.buttonBrowse.TabIndex = 4;
       this.buttonBrowse.Text = "Browse...";
       this.buttonBrowse.UseVisualStyleBackColor = true;
       this.buttonBrowse.Click += new System.EventHandler(this.buttonBrowse_Click);
@@ -430,7 +499,7 @@ namespace FacebookPhotobook
       this.buttonDownload.Location = new System.Drawing.Point(400, 336);
       this.buttonDownload.Name = "buttonDownload";
       this.buttonDownload.Size = new System.Drawing.Size(100, 64);
-      this.buttonDownload.TabIndex = 4;
+      this.buttonDownload.TabIndex = 5;
       this.buttonDownload.Text = "Download Selected Photos";
       this.buttonDownload.UseVisualStyleBackColor = true;
       this.buttonDownload.Click += new System.EventHandler(this.buttonDownload_Click);
@@ -522,6 +591,7 @@ namespace FacebookPhotobook
       // 
       // pictureBoxDownloader
       // 
+      this.pictureBoxDownloader.Anchor = System.Windows.Forms.AnchorStyles.None;
       this.pictureBoxDownloader.Location = new System.Drawing.Point(288, 244);
       this.pictureBoxDownloader.Name = "pictureBoxDownloader";
       this.pictureBoxDownloader.Size = new System.Drawing.Size(100, 72);
@@ -537,7 +607,7 @@ namespace FacebookPhotobook
       this.buttonCancelDownload.Location = new System.Drawing.Point(288, 178);
       this.buttonCancelDownload.Name = "buttonCancelDownload";
       this.buttonCancelDownload.Size = new System.Drawing.Size(100, 64);
-      this.buttonCancelDownload.TabIndex = 12;
+      this.buttonCancelDownload.TabIndex = 0;
       this.buttonCancelDownload.Text = "Cancel Downloading";
       this.buttonCancelDownload.UseVisualStyleBackColor = true;
       this.buttonCancelDownload.Visible = false;
@@ -548,27 +618,53 @@ namespace FacebookPhotobook
       this.buttonCancelGetPhotos.Location = new System.Drawing.Point(162, 12);
       this.buttonCancelGetPhotos.Name = "buttonCancelGetPhotos";
       this.buttonCancelGetPhotos.Size = new System.Drawing.Size(100, 64);
-      this.buttonCancelGetPhotos.TabIndex = 13;
+      this.buttonCancelGetPhotos.TabIndex = 3;
       this.buttonCancelGetPhotos.Text = "Cancel Photo Retrieval";
       this.buttonCancelGetPhotos.UseVisualStyleBackColor = true;
       this.buttonCancelGetPhotos.Visible = false;
       this.buttonCancelGetPhotos.Click += new System.EventHandler(this.buttonCancelGetPhotos_Click);
+      // 
+      // progressBarDownloadPhoto
+      // 
+      this.progressBarDownloadPhoto.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                  | System.Windows.Forms.AnchorStyles.Right)));
+      this.progressBarDownloadPhoto.Location = new System.Drawing.Point(4, 400);
+      this.progressBarDownloadPhoto.Name = "progressBarDownloadPhoto";
+      this.progressBarDownloadPhoto.Size = new System.Drawing.Size(668, 16);
+      this.progressBarDownloadPhoto.TabIndex = 2;
+      this.progressBarDownloadPhoto.Visible = false;
+      // 
+      // progressBarDownloadTotal
+      // 
+      this.progressBarDownloadTotal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                  | System.Windows.Forms.AnchorStyles.Right)));
+      this.progressBarDownloadTotal.Location = new System.Drawing.Point(4, 380);
+      this.progressBarDownloadTotal.Name = "progressBarDownloadTotal";
+      this.progressBarDownloadTotal.Size = new System.Drawing.Size(668, 16);
+      this.progressBarDownloadTotal.TabIndex = 1;
+      this.progressBarDownloadTotal.Visible = false;
       // 
       // formMain
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(677, 421);
+      this.Controls.Add(this.progressBarDownloadTotal);
+      this.Controls.Add(this.progressBarDownloadPhoto);
       this.Controls.Add(this.buttonCancelGetPhotos);
       this.Controls.Add(this.buttonCancelDownload);
       this.Controls.Add(this.pictureBoxDownloader);
       this.Controls.Add(this.splitContainerMain);
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "formMain";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "Facebook Photobook";
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.formMain_FormClosed);
       this.groupBoxConnect.ResumeLayout(false);
       this.groupBoxConnect.PerformLayout();
+      this.panelTimeout.ResumeLayout(false);
+      this.panelTimeout.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTimeoutTime)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.pictureUserPicture)).EndInit();
       this.splitContainerMain.Panel1.ResumeLayout(false);
       this.splitContainerMain.Panel2.ResumeLayout(false);
@@ -632,6 +728,13 @@ namespace FacebookPhotobook
     private System.Windows.Forms.PictureBox pictureBoxDownloader;
     private System.Windows.Forms.Button buttonCancelDownload;
     private System.Windows.Forms.Button buttonCancelGetPhotos;
+    private System.Windows.Forms.ProgressBar progressBarDownloadPhoto;
+    private System.Windows.Forms.ProgressBar progressBarDownloadTotal;
+    private System.Windows.Forms.Button buttonAbout;
+    private System.Windows.Forms.Panel panelTimeout;
+    private System.Windows.Forms.Label labelTimeoutTimeSec;
+    private System.Windows.Forms.Label labelTimeoutTime;
+    private System.Windows.Forms.NumericUpDown numericUpDownTimeoutTime;
   }
 }
 

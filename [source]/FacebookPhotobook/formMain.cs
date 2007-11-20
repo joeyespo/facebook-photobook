@@ -15,11 +15,6 @@ using Facebook.Exceptions;
 
 namespace FacebookPhotobook
 {
-  // TODO: Right-click on list
-  // - View, expand/collapse/album-only, links, etc
-  // TODO: Progress bars
-  // TODO: Contact facebook
-
   public partial class formMain : Form
   {
 
@@ -70,8 +65,9 @@ namespace FacebookPhotobook
         {
           // Tagged information
           if (!taggedPhotos.ContainsKey(photos[i]) || (!taggedPhotos[photos[i]]))
-          taggedPhotos[photos[i]] = taggedPhotoTable[i];
-        if ((!taggedAlbums.ContainsKey(albumMap[photos[i].AlbumId])) || (!taggedAlbums[albumMap[photos[i].AlbumId]]))
+            taggedPhotos[photos[i]] = taggedPhotoTable[i];
+          if ((photos[i].AlbumId != "0") &&
+            ((!taggedAlbums.ContainsKey(albumMap[photos[i].AlbumId])) || (!taggedAlbums[albumMap[photos[i].AlbumId]])))
             taggedAlbums[albumMap[photos[i].AlbumId]] = taggedPhotoTable[i];
           if ((!taggedUsers.ContainsKey(userMap[photos[i].OwnerUserId])) || (!taggedUsers[userMap[photos[i].OwnerUserId]]))
             taggedUsers[userMap[photos[i].OwnerUserId]] = taggedPhotoTable[i];
@@ -186,7 +182,7 @@ namespace FacebookPhotobook
     UserConnection connection;
     Font boldFont = new Font(DefaultFont, FontStyle.Bold);
     bool getAlbumCoverPhotos = true;
-    bool getYourAlbums = true;
+    bool getYourAlbums = false;
     RetrievalLevel retrievalLevel = RetrievalLevel.RetrieveOnlyRelevantPhotos;
 
     public formMain()
@@ -227,7 +223,10 @@ namespace FacebookPhotobook
 
     private void pictureBoxDownloader_LoadProgressChanged(object sender, ProgressChangedEventArgs e)
     {
-      // TODO: Progress
+      int value = e.ProgressPercentage;
+      if (e.ProgressPercentage >= progressBarDownloadPhoto.Maximum)
+        value = progressBarDownloadPhoto.Maximum;
+      progressBarDownloadPhoto.Value = value;
     }
 
     private void buttonBrowse_Click(object sender, EventArgs e)
@@ -266,6 +265,7 @@ namespace FacebookPhotobook
     private void includeAlbumsUploadedByYouToolStripMenuItem_Click(object sender, EventArgs e)
     {
       getYourAlbums = !getYourAlbums;
+      if (getYourAlbums) MessageBox.Show(this, "Note: this option -may- take a long time with the current version on the Facebook API, depending on how many albums you have uploaded.\nYou may want to select the 'Automatically start downloading' checkbox and let the program run the background.", "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void retrieveOnlyRelevantPhotosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -276,15 +276,18 @@ namespace FacebookPhotobook
     private void retrieveAllPhotosFromIncludedAlbumsToolStripMenuItem_Click(object sender, EventArgs e)
     {
       retrievalLevel = RetrievalLevel.RetrieveAllPhotosFromIncludedAlbums;
+      MessageBox.Show(this, "Note: this option will take a long time with the current version on the Facebook API.\nYou may want to select the 'Automatically start downloading' checkbox and let the program run the background.", "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void retrieveAllPhotosFromAllIncludedUsersAlbumsToolStripMenuItem_Click(object sender, EventArgs e)
     {
+      MessageBox.Show(this, "Note: this option will take a long time with the current version on the Facebook API.\nYou may want to select the 'Automatically start downloading' checkbox and let the program run the background.", "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
       retrievalLevel = RetrievalLevel.RetrieveAllPhotosFromAllIncludedUsersAlbums;
     }
 
     private void retrieveAllPhotosFromAllFriendsToolStripMenuItem_Click(object sender, EventArgs e)
     {
+      MessageBox.Show(this, "Note: this option will take a long time with the current version on the Facebook API.\nYou may want to select the 'Automatically start downloading' checkbox and let the program run the background.", "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
       retrievalLevel = RetrievalLevel.RetrieveAllPhotosFromAllFriends;
     }
 
@@ -338,21 +341,27 @@ namespace FacebookPhotobook
       doGetPhotos();
     }
 
+    private void buttonAbout_Click(object sender, EventArgs e)
+    {
+      (new formAbout()).ShowDialog(this);
+    }
+
     private void buttonExpandAll_Click(object sender, EventArgs e)
     {
       TreeNode selectedNode = treeViewPhotos.SelectedNode;
       treeViewPhotos.ExpandAll();
-      for (; selectedNode != null && selectedNode.Parent != null; selectedNode = selectedNode.Parent)
       treeViewPhotos.SelectedNode = selectedNode;
-      selectedNode.EnsureVisible();
+      if (selectedNode != null) selectedNode.EnsureVisible();
     }
 
     private void buttonCollapseAll_Click(object sender, EventArgs e)
     {
       TreeNode selectedNode = treeViewPhotos.SelectedNode;
       treeViewPhotos.CollapseAll();
+      for (; selectedNode != null && selectedNode.Parent != null; selectedNode = selectedNode.Parent)
+      { }
       treeViewPhotos.SelectedNode = selectedNode;
-      selectedNode.EnsureVisible();
+      if (selectedNode != null) selectedNode.EnsureVisible();
     }
 
     private void buttonShowAlbums_Click(object sender, EventArgs e)
@@ -463,7 +472,7 @@ namespace FacebookPhotobook
         }
         catch (FacebookRequestLimitException)
         {
-          if (MessageBoxEx.Show(this, "Too many requests have been sent to Facebook in a short amount of time.\n\nWait a few minutes then try again, or click Cancel to stop trying.\nThis message will timeout in 120 seconds", "Facebook Photobook", MessageBoxButtons.RetryCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 120000) == DialogResult.Cancel)
+          if (MessageBoxEx.Show(this, "Too many requests have been sent to Facebook in a short amount of time.\n\nWait a few minutes then try again, or click Cancel to stop trying.\nThis message will timeout in " + (int)numericUpDownTimeoutTime.Value + " seconds", "Facebook Photobook", MessageBoxButtons.RetryCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, (uint)((int)numericUpDownTimeoutTime.Value * 1000)) == DialogResult.Cancel)
             throw;
         }
       }
@@ -551,7 +560,7 @@ namespace FacebookPhotobook
           // Get tagged albums
           Collection<string> taggedAlbumIds = new Collection<string>();
           foreach (Photo photo in taggedPhotos)
-            if (!taggedAlbumIds.Contains(photo.AlbumId))
+            if ((photo.AlbumId != "0") && (!taggedAlbumIds.Contains(photo.AlbumId)))
               taggedAlbumIds.Add(photo.AlbumId);
           Collection<Album> taggedAlbums = doServiceQuery<Collection<Album>>(
             delegate() { return connection.Service.GetPhotoAlbums(taggedAlbumIds); });
@@ -654,11 +663,14 @@ namespace FacebookPhotobook
                   yourMissingPhotos.Add(photo);
             }
             // Add user
-            if (!users.Contains(connection.User))
-              users.Add(connection.User);
-            // Add your albums and photos
-            albums.AddRange(yourMissingAlbums);
-            photos.AddRange(yourMissingPhotos);
+            if (yourMissingPhotos.Count > 0)
+            {
+              if (!users.Contains(connection.User))
+                users.Add(connection.User);
+              // Add your albums and photos
+              albums.AddRange(yourMissingAlbums);
+              photos.AddRange(yourMissingPhotos);
+            }
           }
 
           if (getAlbumCoverPhotos)
@@ -727,12 +739,32 @@ namespace FacebookPhotobook
         {
           ThreeStateTreeNode userNode = new ThreeStateTreeNode();
           userNode.Tag = user;
-          // TODO: Untagged users
           userNode.ImageIndex = (pb.IsTaggedUser(user)) ? (0) : (5);
           userNode.SelectedImageIndex = userNode.ImageIndex;
           userNode.Text = user.Name;
           userNode.NodeFont = boldFont;
           treeViewPhotos.Nodes.Add(userNode);
+          // Add albumless photos
+          ThreeStateTreeNode albumlessNode = new ThreeStateTreeNode();
+          albumlessNode.Tag = null;
+          albumlessNode.ImageIndex = 10;
+          albumlessNode.SelectedImageIndex = albumlessNode.ImageIndex;
+          albumlessNode.Text = "(Albumless)";
+          foreach (Photo photo in pb.Photos)
+          {
+            // Only display those pictures in no album
+            if ((photo.OwnerUserId != user.UserId) || (photo.AlbumId != "0")) continue;
+            ThreeStateTreeNode photoNode = new ThreeStateTreeNode();
+            photoNode.Tag = photo;
+            photoNode.ImageIndex = (pb.IsTaggedPhoto(photo)) ? (2) : (7);
+            photoNode.SelectedImageIndex = photoNode.ImageIndex;
+            photoNode.Text = photo.PhotoId;
+            albumlessNode.Nodes.Add(photoNode);
+            // Initial check
+            photoNode.Toggle();
+          }
+          if (albumlessNode.Nodes.Count > 0)
+            userNode.Nodes.Add(albumlessNode);
           // Add albums
           foreach (Album album in pb.Albums)
           {
@@ -740,7 +772,6 @@ namespace FacebookPhotobook
             if (album.OwnerUserId != user.UserId) continue;
             ThreeStateTreeNode albumNode = new ThreeStateTreeNode();
             albumNode.Tag = album;
-            // TODO: Untagged albums
             albumNode.ImageIndex = (pb.IsAlbumCoverArtIncluded(album))
               ? ((pb.IsTaggedAlbum(album)) ? (1) : (6))
               : ((pb.IsTaggedAlbum(album)) ? (4) : (9));
@@ -754,14 +785,13 @@ namespace FacebookPhotobook
               if (photo.AlbumId != album.AlbumId) continue;
               ThreeStateTreeNode photoNode = new ThreeStateTreeNode();
               photoNode.Tag = photo;
-              // TODO: Untagged photos
               photoNode.ImageIndex = (pb.IsPhotoAlbumCover(photo))
                 ? ((pb.IsTaggedPhoto(photo)) ? (3) : (8))
                 : ((pb.IsTaggedPhoto(photo)) ? (2) : (7));
               photoNode.SelectedImageIndex = photoNode.ImageIndex;
               photoNode.Text = photo.PhotoId;
               albumNode.Nodes.Add(photoNode);
-              // Initail check
+              // Initial check
               photoNode.Toggle();
             }
             albumNode.Collapse();
@@ -819,17 +849,20 @@ namespace FacebookPhotobook
       if (treeViewPhotos.SelectedNode.Parent.Parent == null)
       {
         Album album = (Album)treeViewPhotos.SelectedNode.Tag;
-        Photo photo = connection.Photobook.PhotoFromPhotoId(album.CoverPhotoId);
-        if (photo != null)
+        if (album != null)
         {
-          pictureBoxPreview.LoadAsync(photo.PictureSmallUrl.ToString());
-          pictureBoxPreview.Tag = photo;
+          Photo photo = connection.Photobook.PhotoFromPhotoId(album.CoverPhotoId);
+          if (photo != null)
+          {
+            pictureBoxPreview.LoadAsync(photo.PictureSmallUrl.ToString());
+            pictureBoxPreview.Tag = photo;
+          }
+          labelDescription.Text = album.Description.Trim();
+          if (labelDescription.Text != "")
+            labelDescriptionTitle.Text = "Description";
+          labelDateCreated.Text = album.CreateDate.ToString();
+          linkLabelViewLarge.Visible = (photo != null);
         }
-        labelDescription.Text = album.Description.Trim();
-        if (labelDescription.Text != "")
-          labelDescriptionTitle.Text = "Description";
-        labelDateCreated.Text = album.CreateDate.ToString();
-        linkLabelViewLarge.Visible = (photo != null);
       }
       else    // Else is photo
       {
@@ -861,9 +894,17 @@ namespace FacebookPhotobook
         {
           this.Text = "Facebook Photobook - Downloading...";
           this.Refresh();
+          UserPhotobook pb = connection.Photobook;
           splitContainerMain.Enabled = false;
+          treeViewPhotos.BackColor = Color.FromKnownColor(KnownColor.ButtonFace);
           buttonCancelDownload.Visible = true;
           buttonCancelDownload.BringToFront();
+          progressBarDownloadTotal.Maximum = 0;
+          progressBarDownloadTotal.Value = 0;
+          progressBarDownloadTotal.Visible = true;
+          progressBarDownloadPhoto.Maximum = 0;
+          progressBarDownloadPhoto.Value = 0;
+          progressBarDownloadPhoto.Visible = true;
           cancelDownload = false;
 
           List<char> invalidPathCharList = new List<char>();
@@ -883,7 +924,24 @@ namespace FacebookPhotobook
           invalidPathCharList.Add(Path.DirectorySeparatorChar);
           char[] invalidPathChars = invalidPathCharList.ToArray();
           string basedirectory = Path.GetFullPath(textBoxDirectory.Text);
-          UserPhotobook pb = connection.Photobook;
+
+          // Get photo count
+          int photoCount = 0;
+          foreach (TreeNode userNode in treeViewPhotos.Nodes)
+          {
+            if (!userNode.Checked) continue;
+            foreach (TreeNode albumNode in userNode.Nodes)
+            {
+              if (!albumNode.Checked) continue;
+              foreach (TreeNode photoNode in albumNode.Nodes)
+              {
+                if (!photoNode.Checked) continue;
+                photoCount++;
+              }
+            }
+          }
+          progressBarDownloadTotal.Maximum = photoCount;
+          progressBarDownloadTotal.Value = 0;
 
           // Get each user
           foreach (TreeNode userNode in treeViewPhotos.Nodes)
@@ -905,7 +963,7 @@ namespace FacebookPhotobook
               if (!albumNode.Checked) continue;
               Album album = (Album)albumNode.Tag;
               string userName = user.Name.Trim();
-              string albumName = album.Name.Trim();
+              string albumName = ( album != null )?( album.Name.Trim() ):( "(Albumless)" );
               int index = 0;
               while ((index = userName.IndexOfAny(invalidPathChars)) != -1) userName = userName.Replace(userName[index], '-');
               while ((index = albumName.IndexOfAny(invalidPathChars)) != -1) albumName = albumName.Replace(albumName[index], '-');
@@ -914,18 +972,6 @@ namespace FacebookPhotobook
               if (userName == "") userName = "untitled";
               if (albumName == "") albumName = "untitled";
               string directory = Path.Combine(Path.Combine(basedirectory, userName), albumName);
-              // Create directory
-              if (!Directory.Exists(directory))
-              {
-                try
-                { Directory.CreateDirectory(directory); }
-                catch (IOException ex)
-                {
-                  if (MessageBoxEx.Show(this, ex.Message + "\n\nTo continue with the process click OK, otherwise click Cancel.\nThis message will timeout in 60 seconds.", "Facebook Photobook", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, 60000) == DialogResult.Cancel)
-                    throw;
-                  continue;
-                }
-              }
 
               // Get each photo
               foreach (TreeNode photoNode in albumNode.Nodes)
@@ -939,9 +985,28 @@ namespace FacebookPhotobook
                 string filetitle = photo.PhotoId;
                 string filename = Path.Combine(directory, photo.PhotoId + ".png");
 
+                // Increase progress bar
+                if (progressBarDownloadTotal.Value < progressBarDownloadTotal.Maximum)
+                  progressBarDownloadTotal.Value++;
+
+                // Create directory
+                if (!Directory.Exists(directory))
+                {
+                  try
+                  { Directory.CreateDirectory(directory); }
+                  catch (IOException ex)
+                  {
+                    if (MessageBoxEx.Show(this, ex.Message + "\n\nTo continue with the process click OK, otherwise click Cancel.\nThis message will timeout in 60 seconds.", "Facebook Photobook", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, 60000) == DialogResult.Cancel)
+                      throw;
+                    continue;
+                  }
+                }
+
                 // Save image
                 if ((checkBoxSkipExisting.Checked) && (File.Exists(filename))) continue;
                 nextDownloaded = false;
+                progressBarDownloadPhoto.Maximum = 100;
+                progressBarDownloadPhoto.Value = 0;
                 pictureBoxDownloader.LoadAsync(photo.PictureBigUrl.ToString());
                 while (!nextDownloaded)
                 {
@@ -949,6 +1014,8 @@ namespace FacebookPhotobook
                   if (cancelDownload) break;
                   Application.DoEvents();
                 }
+                progressBarDownloadPhoto.Value = 0;
+                progressBarDownloadPhoto.Maximum = 0;
                 if (this.IsDisposed) break;
                 if (cancelDownload) break;
                 if (pictureBoxDownloader.Image != null)
@@ -957,15 +1024,24 @@ namespace FacebookPhotobook
               if (this.IsDisposed) break;
               if (cancelDownload) break;
 
-              // TODO: Album description and date, photo comments and dates
+              // TODO: Album description and date, photo comments and dates (if not albumless)
             }
             if (this.IsDisposed) break;
             if (cancelDownload) break;
           }
+          progressBarDownloadTotal.Value = progressBarDownloadTotal.Maximum;
+          Application.DoEvents();
         }
         finally
         {
+          progressBarDownloadTotal.Visible = false;
+          progressBarDownloadTotal.Value = 0;
+          progressBarDownloadTotal.Maximum = 0;
+          progressBarDownloadPhoto.Visible = false;
+          progressBarDownloadPhoto.Value = 0;
+          progressBarDownloadPhoto.Maximum = 0;
           buttonCancelDownload.Visible = false;
+          treeViewPhotos.BackColor = Color.FromKnownColor(KnownColor.Window);
           splitContainerMain.Enabled = true;
           this.Text = "Facebook Photobook";
         }
@@ -992,6 +1068,11 @@ namespace FacebookPhotobook
     }
 
     #endregion
+
+    private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+    {
+
+    }
 
   }
 }

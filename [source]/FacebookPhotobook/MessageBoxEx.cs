@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
@@ -149,7 +148,7 @@ namespace System.Windows.Forms
 			
 			hookTimeout = uTimeout;
 			hookCaption = caption != null ? caption : "";
-			hHook = SetWindowsHookEx(WH_CALLWNDPROCRET, hookProc, IntPtr.Zero, Thread.CurrentThread.ManagedThreadId);
+			hHook = SetWindowsHookEx(WH_CALLWNDPROCRET, hookProc, IntPtr.Zero, AppDomain.GetCurrentThreadId());
 		}
 		
 		private static IntPtr MessageBoxHookProc(int nCode, IntPtr wParam, IntPtr lParam)

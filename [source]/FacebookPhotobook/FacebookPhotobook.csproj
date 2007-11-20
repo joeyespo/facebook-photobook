@@ -9,6 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FacebookPhotobook</RootNamespace>
     <AssemblyName>FacebookPhotobook</AssemblyName>
+    <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,6 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="formAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formAbout.Designer.cs">
+      <DependentUpon>formAbout.cs</DependentUpon>
+    </Compile>
     <Compile Include="formMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,6 +74,10 @@
     <Compile Include="MessageBoxEx.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="formAbout.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>formAbout.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="formMain.resx">
       <SubType>Designer</SubType>
       <DependentUpon>formMain.cs</DependentUpon>
@@ -103,6 +114,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\facebook_login.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
