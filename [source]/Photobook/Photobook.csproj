@@ -7,8 +7,8 @@
     <ProjectGuid>{97118A1A-BC13-4977-ABCE-899F4A84479E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FacebookPhotobook</RootNamespace>
-    <AssemblyName>FacebookPhotobook</AssemblyName>
+    <RootNamespace>Photobook</RootNamespace>
+    <AssemblyName>Photobook</AssemblyName>
     <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

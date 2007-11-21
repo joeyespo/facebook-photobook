@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FacebookPhotobook.Properties
+namespace Photobook.Properties
 {
 
 

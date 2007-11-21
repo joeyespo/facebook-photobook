@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Reflection;
 
-namespace FacebookPhotobook
+namespace Photobook
 {
   partial class formAbout : Form
   {

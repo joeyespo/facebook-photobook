@@ -1,4 +1,4 @@
-namespace FacebookPhotobook
+namespace Photobook
 {
   partial class formMain
   {
@@ -220,7 +220,7 @@ namespace FacebookPhotobook
       // 
       // buttonGetOptions
       // 
-      this.buttonGetOptions.Image = global::FacebookPhotobook.Properties.Resources.Dropdown;
+      this.buttonGetOptions.Image = global::Photobook.Properties.Resources.Dropdown;
       this.buttonGetOptions.Location = new System.Drawing.Point(112, 60);
       this.buttonGetOptions.Name = "buttonGetOptions";
       this.buttonGetOptions.Size = new System.Drawing.Size(16, 40);
@@ -231,7 +231,7 @@ namespace FacebookPhotobook
       // 
       // buttonConnect
       // 
-      this.buttonConnect.Image = global::FacebookPhotobook.Properties.Resources.facebook_login;
+      this.buttonConnect.Image = global::Photobook.Properties.Resources.facebook_login;
       this.buttonConnect.Location = new System.Drawing.Point(8, 20);
       this.buttonConnect.Name = "buttonConnect";
       this.buttonConnect.Size = new System.Drawing.Size(120, 36);
@@ -302,11 +302,11 @@ namespace FacebookPhotobook
       // buttonView
       // 
       this.buttonView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-      this.buttonView.Location = new System.Drawing.Point(244, 376);
+      this.buttonView.Location = new System.Drawing.Point(176, 376);
       this.buttonView.Name = "buttonView";
-      this.buttonView.Size = new System.Drawing.Size(76, 22);
+      this.buttonView.Size = new System.Drawing.Size(144, 22);
       this.buttonView.TabIndex = 3;
-      this.buttonView.Text = "View...";
+      this.buttonView.Text = "Open Containing Folder...";
       this.buttonView.UseVisualStyleBackColor = true;
       this.buttonView.Click += new System.EventHandler(this.buttonView_Click);
       // 
@@ -658,7 +658,7 @@ namespace FacebookPhotobook
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "formMain";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-      this.Text = "Facebook Photobook";
+      this.Text = "Photobook";
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.formMain_FormClosed);
       this.groupBoxConnect.ResumeLayout(false);
       this.groupBoxConnect.PerformLayout();

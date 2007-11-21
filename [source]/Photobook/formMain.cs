@@ -13,7 +13,7 @@ using Facebook.Entity;
 using Facebook.Components;
 using Facebook.Exceptions;
 
-namespace FacebookPhotobook
+namespace Photobook
 {
   public partial class formMain : Form
   {
@@ -66,7 +66,7 @@ namespace FacebookPhotobook
           // Tagged information
           if (!taggedPhotos.ContainsKey(photos[i]) || (!taggedPhotos[photos[i]]))
             taggedPhotos[photos[i]] = taggedPhotoTable[i];
-          if ((photos[i].AlbumId != "0") &&
+          if ((photos[i].AlbumId != "0") && (albumMap.ContainsKey(photos[i].AlbumId)) &&
             ((!taggedAlbums.ContainsKey(albumMap[photos[i].AlbumId])) || (!taggedAlbums[albumMap[photos[i].AlbumId]])))
             taggedAlbums[albumMap[photos[i].AlbumId]] = taggedPhotoTable[i];
           if ((!taggedUsers.ContainsKey(userMap[photos[i].OwnerUserId])) || (!taggedUsers[userMap[photos[i].OwnerUserId]]))
@@ -241,7 +241,7 @@ namespace FacebookPhotobook
     {
       if (!Directory.Exists(textBoxDirectory.Text))
       {
-        MessageBox.Show(this, "Directory does not exist.", "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        MessageBox.Show(this, "Directory does not exist.", "Photobook", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         return;
       }
       Process.Start(textBoxDirectory.Text);
@@ -265,7 +265,7 @@ namespace FacebookPhotobook
     private void includeAlbumsUploadedByYouToolStripMenuItem_Click(object sender, EventArgs e)
     {
       getYourAlbums = !getYourAlbums;
-      if (getYourAlbums) MessageBox.Show(this, "Note: this option -may- take a long time with the current version on the Facebook API, depending on how many albums you have uploaded.\nYou may want to select the 'Automatically start downloading' checkbox and let the program run the background.", "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      if (getYourAlbums) MessageBox.Show(this, "Note: this option -may- take a long time with the current version on the Facebook API, depending on how many albums you have uploaded.\nYou may want to select the 'Automatically start downloading' checkbox and let the program run the background.", "Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void retrieveOnlyRelevantPhotosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -276,18 +276,18 @@ namespace FacebookPhotobook
     private void retrieveAllPhotosFromIncludedAlbumsToolStripMenuItem_Click(object sender, EventArgs e)
     {
       retrievalLevel = RetrievalLevel.RetrieveAllPhotosFromIncludedAlbums;
-      MessageBox.Show(this, "Note: this option will take a long time with the current version on the Facebook API.\nYou may want to select the 'Automatically start downloading' checkbox and let the program run the background.", "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      MessageBox.Show(this, "Note: this option will take a long time with the current version on the Facebook API.\nYou may want to select the 'Automatically start downloading' checkbox and let the program run the background.", "Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void retrieveAllPhotosFromAllIncludedUsersAlbumsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-      MessageBox.Show(this, "Note: this option will take a long time with the current version on the Facebook API.\nYou may want to select the 'Automatically start downloading' checkbox and let the program run the background.", "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      MessageBox.Show(this, "Note: this option will take a long time with the current version on the Facebook API.\nYou may want to select the 'Automatically start downloading' checkbox and let the program run the background.", "Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
       retrievalLevel = RetrievalLevel.RetrieveAllPhotosFromAllIncludedUsersAlbums;
     }
 
     private void retrieveAllPhotosFromAllFriendsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-      MessageBox.Show(this, "Note: this option will take a long time with the current version on the Facebook API.\nYou may want to select the 'Automatically start downloading' checkbox and let the program run the background.", "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      MessageBox.Show(this, "Note: this option will take a long time with the current version on the Facebook API.\nYou may want to select the 'Automatically start downloading' checkbox and let the program run the background.", "Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
       retrievalLevel = RetrievalLevel.RetrieveAllPhotosFromAllFriends;
     }
 
@@ -422,7 +422,7 @@ namespace FacebookPhotobook
     void onDisconnected()
     {
       buttonConnect.Text = "";
-      buttonConnect.Image = FacebookPhotobook.Properties.Resources.facebook_login;
+      buttonConnect.Image = Photobook.Properties.Resources.facebook_login;
 
       // Clean up data
       labelUserName.Text = "";
@@ -472,7 +472,7 @@ namespace FacebookPhotobook
         }
         catch (FacebookRequestLimitException)
         {
-          if (MessageBoxEx.Show(this, "Too many requests have been sent to Facebook in a short amount of time.\n\nWait a few minutes then try again, or click Cancel to stop trying.\nThis message will timeout in " + (int)numericUpDownTimeoutTime.Value + " seconds", "Facebook Photobook", MessageBoxButtons.RetryCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, (uint)((int)numericUpDownTimeoutTime.Value * 1000)) == DialogResult.Cancel)
+          if (MessageBoxEx.Show(this, "Too many requests have been sent to Facebook in a short amount of time.\n\nWait a few minutes then try again, or click Cancel to stop trying.\nThis message will timeout in " + (int)numericUpDownTimeoutTime.Value + " seconds", "Photobook", MessageBoxButtons.RetryCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, (uint)((int)numericUpDownTimeoutTime.Value * 1000)) == DialogResult.Cancel)
             throw;
         }
       }
@@ -489,7 +489,7 @@ namespace FacebookPhotobook
       }
       catch (FacebookException ex)
       {
-        MessageBox.Show(this, ex.Message, "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(this, ex.Message, "Photobook", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
       }
 
@@ -526,7 +526,7 @@ namespace FacebookPhotobook
 
       if (connection == null)
       {
-        MessageBox.Show(this, "Not logged in.", "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show(this, "Not logged in.", "Photobook", MessageBoxButtons.OK, MessageBoxIcon.Information);
         buttonConnect.Focus();
         return false;
       }
@@ -537,7 +537,7 @@ namespace FacebookPhotobook
       {
         try
         {
-          this.Text = "Facebook Photobook - Busy...";
+          this.Text = "Photobook - Busy...";
           cancelGetPhotos = false;
           splitContainerMain.Enabled = false;
           buttonCancelGetPhotos.Visible = true;
@@ -557,19 +557,33 @@ namespace FacebookPhotobook
           Collection<Photo> taggedPhotos = doServiceQuery<Collection<Photo>>(
             delegate() { return connection.Service.GetPhotos(connection.User); });
           Application.DoEvents(); if (cancelGetPhotos) return false;
-          // Get tagged albums
+          // Get tagged albums and users
           Collection<string> taggedAlbumIds = new Collection<string>();
+          Collection<string> taggedUserIds = new Collection<string>();
           foreach (Photo photo in taggedPhotos)
-            if ((photo.AlbumId != "0") && (!taggedAlbumIds.Contains(photo.AlbumId)))
-              taggedAlbumIds.Add(photo.AlbumId);
+          {
+            if (photo.AlbumId == "0")
+            {
+              if (!taggedUserIds.Contains(photo.OwnerUserId))
+                taggedUserIds.Add(photo.OwnerUserId);
+            }
+            else
+            {
+              if (!taggedAlbumIds.Contains(photo.AlbumId))
+                taggedAlbumIds.Add(photo.AlbumId);
+            }
+          }
+          // Note: May NOT return all album objects (if album owner is not a friend)
           Collection<Album> taggedAlbums = doServiceQuery<Collection<Album>>(
             delegate() { return connection.Service.GetPhotoAlbums(taggedAlbumIds); });
           Application.DoEvents(); if (cancelGetPhotos) return false;
-          // Get tagged users 
-          Collection<string> taggedUserIds = new Collection<string>();
+          // Get tagged users
           foreach (Album album in taggedAlbums)
             if (!taggedUserIds.Contains(album.OwnerUserId))
               taggedUserIds.Add(album.OwnerUserId);
+          foreach (Photo photo in taggedPhotos)
+            if (!taggedUserIds.Contains(photo.OwnerUserId))
+              taggedUserIds.Add(photo.OwnerUserId);
           Collection<User> taggedUsers = doServiceQuery<Collection<User>>(
             delegate() { return connection.Service.GetUserInfo(taggedUserIds); });
           Application.DoEvents(); if (cancelGetPhotos) return false;
@@ -702,19 +716,19 @@ namespace FacebookPhotobook
         }
         finally
         {
-          this.Text = "Facebook Photobook";
+          this.Text = "Photobook";
           buttonCancelGetPhotos.Visible = false;
           splitContainerMain.Enabled = true;
         }
       }
       catch (ApplicationException ex)
       {
-        MessageBox.Show(this, ex.Message, "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(this, ex.Message, "Photobook", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
       }
       catch (FacebookException ex)
       {
-        MessageBox.Show(this, ex.Message, "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(this, ex.Message, "Photobook", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
       }
       return true;
@@ -753,7 +767,7 @@ namespace FacebookPhotobook
           foreach (Photo photo in pb.Photos)
           {
             // Only display those pictures in no album
-            if ((photo.OwnerUserId != user.UserId) || (photo.AlbumId != "0")) continue;
+            if ((photo.OwnerUserId != user.UserId) || ((photo.AlbumId != "0") && (pb.AlbumFromAlbumId(photo.AlbumId) != null))) continue;
             ThreeStateTreeNode photoNode = new ThreeStateTreeNode();
             photoNode.Tag = photo;
             photoNode.ImageIndex = (pb.IsTaggedPhoto(photo)) ? (2) : (7);
@@ -892,7 +906,7 @@ namespace FacebookPhotobook
       {
         try
         {
-          this.Text = "Facebook Photobook - Downloading...";
+          this.Text = "Photobook - Downloading...";
           this.Refresh();
           UserPhotobook pb = connection.Photobook;
           splitContainerMain.Enabled = false;
@@ -996,7 +1010,7 @@ namespace FacebookPhotobook
                   { Directory.CreateDirectory(directory); }
                   catch (IOException ex)
                   {
-                    if (MessageBoxEx.Show(this, ex.Message + "\n\nTo continue with the process click OK, otherwise click Cancel.\nThis message will timeout in 60 seconds.", "Facebook Photobook", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, 60000) == DialogResult.Cancel)
+                    if (MessageBoxEx.Show(this, ex.Message + "\n\nTo continue with the process click OK, otherwise click Cancel.\nThis message will timeout in 60 seconds.", "Photobook", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, 60000) == DialogResult.Cancel)
                       throw;
                     continue;
                   }
@@ -1043,17 +1057,17 @@ namespace FacebookPhotobook
           buttonCancelDownload.Visible = false;
           treeViewPhotos.BackColor = Color.FromKnownColor(KnownColor.Window);
           splitContainerMain.Enabled = true;
-          this.Text = "Facebook Photobook";
+          this.Text = "Photobook";
         }
       }
       catch (ApplicationException ex)
       {
-        MessageBox.Show(this, ex.Message, "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(this, ex.Message, "Photobook", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
       }
       catch (FacebookException ex)
       {
-        MessageBox.Show(this, ex.Message, "Facebook Photobook", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(this, ex.Message, "Photobook", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
       }
       return true;

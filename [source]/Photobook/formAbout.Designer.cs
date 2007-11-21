@@ -1,4 +1,4 @@
-namespace FacebookPhotobook
+namespace Photobook
 {
   partial class formAbout
   {

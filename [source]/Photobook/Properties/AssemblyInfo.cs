@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FacebookPhotobook")]
+[assembly: AssemblyTitle("Photobook")]
 [assembly: AssemblyDescription("Manage, organize, and display photos from Facebook.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Uber-ware, www.uber-ware.com")]
-[assembly: AssemblyProduct("FacebookPhotobook")]
+[assembly: AssemblyProduct("Photobook")]
 [assembly: AssemblyCopyright("Copyright ©  2007")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
