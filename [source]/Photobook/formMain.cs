@@ -188,8 +188,7 @@ namespace Photobook
     public formMain()
     {
       InitializeComponent();
-      textBoxDirectory.Text = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Photobook");
-      textBoxDirectory.SelectionStart = textBoxDirectory.Text.Length;
+      doSetDirectory(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Photobook"));
       doDisconnect();
       labelUserName.Text = "";
       doUpdatePreview();
@@ -233,8 +232,7 @@ namespace Photobook
     {
       dialogBrowse.SelectedPath = textBoxDirectory.Text;
       if (dialogBrowse.ShowDialog(this) != DialogResult.OK) return;
-      textBoxDirectory.Text = dialogBrowse.SelectedPath;
-      textBoxDirectory.SelectionStart = textBoxDirectory.Text.Length;
+      doSetDirectory(dialogBrowse.SelectedPath);
     }
 
     private void buttonView_Click(object sender, EventArgs e)
@@ -458,6 +456,16 @@ namespace Photobook
     #endregion
 
     #region Class Commands
+
+    bool doSetDirectory(string directory)
+    {
+      textBoxDirectory.Text = directory;
+      if (!textBoxDirectory.Text.EndsWith(Path.DirectorySeparatorChar.ToString()) &&
+        !textBoxDirectory.Text.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+        textBoxDirectory.Text += Path.DirectorySeparatorChar;
+      textBoxDirectory.SelectionStart = textBoxDirectory.Text.Length;
+      return true;
+    }
 
     delegate T QueryFunction<T>();
     T doServiceQuery<T>(QueryFunction<T> f)
@@ -933,7 +941,6 @@ namespace Photobook
           invalidPathCharList.Add('>');
           invalidPathCharList.Add('|');
           invalidPathCharList.Add(Path.VolumeSeparatorChar);
-          invalidPathCharList.Add(Path.PathSeparator);
           invalidPathCharList.Add(Path.AltDirectorySeparatorChar);
           invalidPathCharList.Add(Path.DirectorySeparatorChar);
           char[] invalidPathChars = invalidPathCharList.ToArray();
