@@ -1,4 +1,5 @@
 Facebook Photobook Todo
 ------------------------
 
+- Get the project working with the new version of Facebook
 - Remember options
